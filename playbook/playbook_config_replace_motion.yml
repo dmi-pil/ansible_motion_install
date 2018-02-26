@@ -1,0 +1,32 @@
+- hosts: localhost
+  tasks:
+     - name: install motion
+       apt: name=motion state=latest
+       become: yes
+
+     - lineinfile: dest=/etc/motion/motion.conf regexp='^width 320' line='width 640' state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^height 240" line="height 480" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^framerate 2" line="framerate 30" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^target_dir /var/lib/motion" line="target_dir /home/user/motion" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^auto_brightness off" line="auto_brightness on" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^snapshot_interval 0" line="snapshot_interval 2" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^locate_motion_mode off" line="locate_motion_mode on" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^max_movie_time 0" line="max_movie_time 60" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^webcontrol_port 8080" line="webcontrol_port 8082" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^; webcontrol_authentication username:password" line="; webcontrol_authentication admin:admin" state=present
+       become: yes
+     - lineinfile: dest=/etc/motion/motion.conf regexp="^webcontrol_port 8080" line="webcontrol_port 8082" state=present
+       become: yes
+
+     - name: restart motion
+       service: name=motion state=started
+       become: yes
